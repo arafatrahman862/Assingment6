@@ -193,7 +193,7 @@ export default function BookRide() {
       if (!pickup) return;
 
       const provider = new OpenStreetMapProvider();
-      const searchControl = GeoSearchControl({
+      const searchControl =  GeoSearchControl({
         provider,
         style: "bar",
         searchLabel: "Search destination...",
