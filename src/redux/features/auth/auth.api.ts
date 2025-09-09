@@ -19,7 +19,7 @@ export const authApi = baseApi.injectEndpoints({
     }),
     register: builder.mutation({
       query: (userInfo) => ({
-        url: "/user/register",
+        url: "/users/register",
         method: "POST",
         data: userInfo,
       }),
@@ -31,10 +31,17 @@ export const authApi = baseApi.injectEndpoints({
         method: "POST",
         data: userInfo,
       }),
+      
+    }),
+     verifyUser: builder.mutation<any, string>({
+      query: (id) => ({
+        url: `/users/verify/${id}`,
+        method: "PATCH",
+      }),
     }),
     userInfo: builder.query({
       query: () => ({
-        url: "/user/me",
+        url: "/users/me",
         method: "GET",
       }),
       providesTags: ["USER"],
@@ -45,7 +52,7 @@ export const authApi = baseApi.injectEndpoints({
 export const {
   useRegisterMutation,
   useLoginMutation,
-
+useVerifyUserMutation,
   useVerifyOtpMutation,
   useUserInfoQuery,
   useLogoutMutation,

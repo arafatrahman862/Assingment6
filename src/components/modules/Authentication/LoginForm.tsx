@@ -23,8 +23,8 @@ export function LoginForm({
   const form = useForm({
     //! For development only
     defaultValues: {
-      email: "mirhussainmurtaza@gmail.com",
-      password: "12345678",
+      email: "demo@gmail.com",
+      password: "Demo12345@",
     },
   });
   const [login] = useLoginMutation();
@@ -36,17 +36,17 @@ export function LoginForm({
         toast.success("Logged in successfully");
         navigate("/");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
 
       if (err.data.message === "Password does not match") {
         toast.error("Invalid credentials");
       }
 
-      if (err.data.message === "User is not verified") {
-        toast.error("Your account is not verified");
-        navigate("/verify", { state: data.email });
-      }
+      // if (err.data.message === "User is not verified") {
+      //   toast.error("Your account is not verified");
+      //   navigate("/verify", { state: data.email });
+      // }
     }
   };
 

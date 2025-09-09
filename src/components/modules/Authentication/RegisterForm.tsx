@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -11,21 +10,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Password from "@/components/ui/Password";
-import { useRegisterMutation } from "@/redux/features/auth/auth.api";
+import {
+  useRegisterMutation,
+  useUserInfoQuery,
+  useVerifyUserMutation,
+} from "@/redux/features/auth/auth.api";
 import { toast } from "sonner";
 
 const registerSchema = z
   .object({
-    name: z
-      .string()
-      .min(3, {
-        error: "Name is too short",
-      })
-      .max(50),
+    name: z.string().min(3, { error: "Name is too short" }).max(50),
     email: z.email(),
     password: z.string().min(8, { error: "Password is too short" }),
     confirmPassword: z
@@ -33,7 +31,7 @@ const registerSchema = z
       .min(8, { error: "Confirm Password is too short" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Password do not match",
+    message: "Passwords do not match",
     path: ["confirmPassword"],
   });
 
@@ -42,7 +40,8 @@ export function RegisterForm({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   const [register] = useRegisterMutation();
-  const navigate = useNavigate();
+  const [verifyUser] = useVerifyUserMutation();
+  const { refetch } = useUserInfoQuery(undefined);
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -62,12 +61,20 @@ export function RegisterForm({
     };
 
     try {
-      await register(userInfo).unwrap();
+     
+      const res = await register(userInfo).unwrap();
 
-      toast.success("User created successfully");
-      navigate("/verify");
-    } catch (error) {
+     
+      if (res?.data?._id) {
+        await verifyUser(res.data._id).unwrap();
+        await refetch();
+        toast.success("✅ Account created & verified successfully!");
+      } else {
+        toast.warning("User created, but could not auto-verify.");
+      }
+    } catch (error: any) {
       console.error(error);
+      toast.error(error?.data?.message || "Registration failed");
     }
   };
 
@@ -83,6 +90,7 @@ export function RegisterForm({
       <div className="grid gap-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* Name */}
             <FormField
               control={form.control}
               name="name"
@@ -92,13 +100,11 @@ export function RegisterForm({
                   <FormControl>
                     <Input placeholder="John Doe" {...field} />
                   </FormControl>
-                  <FormDescription className="sr-only">
-                    This is your public display name.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            {/* Email */}
             <FormField
               control={form.control}
               name="email"
@@ -112,13 +118,11 @@ export function RegisterForm({
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="sr-only">
-                    This is your public display name.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            {/* Password */}
             <FormField
               control={form.control}
               name="password"
@@ -128,13 +132,11 @@ export function RegisterForm({
                   <FormControl>
                     <Password {...field} />
                   </FormControl>
-                  <FormDescription className="sr-only">
-                    This is your public display name.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            {/* Confirm Password */}
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -144,13 +146,11 @@ export function RegisterForm({
                   <FormControl>
                     <Password {...field} />
                   </FormControl>
-                  <FormDescription className="sr-only">
-                    This is your public display name.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <Button type="submit" className="w-full">
               Submit
             </Button>
@@ -163,11 +163,7 @@ export function RegisterForm({
           </span>
         </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full cursor-pointer"
-        >
+        <Button type="button" variant="outline" className="w-full cursor-pointer">
           Login with Google
         </Button>
       </div>

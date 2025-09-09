@@ -10,22 +10,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetDivisionsQuery } from "@/redux/features/division/division.api";
-import { useState } from "react";
+
+
 
 export default function HeroSection() {
-  const [selectedDivision, setSelectedDivision] = useState<string | undefined>(
-    undefined
-  );
 
-  const { data: divisionData } = useGetDivisionsQuery(undefined);
 
-  const divisionOption = divisionData?.map(
-    (item: { _id: string; name: string }) => ({
-      label: item.name,
-      value: item._id,
-    })
-  );
+
+
 
   return (
     <section className="relative min-h-screen flex items-center justify-center text-white">
@@ -61,11 +53,8 @@ export default function HeroSection() {
           <div className="flex flex-col md:flex-row gap-4">
             <Button asChild size="lg" className="px-8 py-3 rounded-lg shadow-lg">
               <Link
-                to={
-                  selectedDivision
-                    ? `/rider/request?division=${selectedDivision}`
-                    : "/rider/request"
-                }
+                to="/rider/request"
+                
               >
                 Book a Ride
               </Link>
