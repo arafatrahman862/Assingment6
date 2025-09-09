@@ -45,7 +45,7 @@ export default function Navbar() {
 
   // Links only for logged-in users
   const loggedInLinks = [
-    { href: "/rider/book", label: "Book a Ride" },
+    { href: "/ride-booking", label: "Book a Ride" },
     { href: "/driver/register", label: "Be a Driver" },
     { href: "/user", label: "User Dashboard" },
   ];

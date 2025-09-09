@@ -16,6 +16,7 @@ import Homepage from "@/pages/Homepage";
 import FeaturesSection from "@/pages/FeaturesSection";
 import FaqSection from "@/pages/FaqSection";
 import Contact from "@/pages/Contact";
+import RideBooking from "@/components/modules/Rider/RideBooking";
 
 
 export const router = createBrowserRouter([
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
       {
         Component: Contact,
         path: "contact",
+      },
+      {
+        Component: RideBooking,
+        path: "ride-booking",
       },
     ],
   },
