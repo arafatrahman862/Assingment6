@@ -7,7 +7,7 @@ import Verify from "@/pages/Verify";
 import { generateRoutes } from "@/utils/generateRoutes";
 import { createBrowserRouter, Navigate } from "react-router";
 import { adminSidebarItems } from "./adminSidebarItems";
-import { userSidebarItems } from "./userSidebarItems";
+import { rideSidebarItems } from "./rideSidebarItems";
 import { withAuth } from "@/utils/withAuth";
 import Unauthorized from "@/pages/Unauthorized";
 import { role } from "@/constants/role";
@@ -52,7 +52,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    Component: withAuth(DashboardLayout, role.superAdmin as TRole),
+    Component: withAuth(DashboardLayout, role.superAdmin as TRole || role.admin as TRole),
     path: "/admin",
     children: [
       { index: true, element: <Navigate to="/admin/analytics" /> },
@@ -61,10 +61,10 @@ export const router = createBrowserRouter([
   },
   {
     Component: withAuth(DashboardLayout, role.rider as TRole),
-    path: "/user",
+    path: "/rider",
     children: [
-      { index: true, element: <Navigate to="/user/bookings" /> },
-      ...generateRoutes(userSidebarItems),
+      { index: true, element: <Navigate to="/rider/analytics" /> },
+      ...generateRoutes(rideSidebarItems),
     ],
   },
   {

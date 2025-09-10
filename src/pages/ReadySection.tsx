@@ -30,7 +30,7 @@ export default function ReadySection() {
           size="lg"
           className="px-10 py-4 rounded-lg shadow-lg text-lg"
         >
-          <Link to="/rider/request">Book a Ride</Link>
+          <Link to="/ride-booking">Book a Ride</Link>
         </Button>
       </div>
     </section>

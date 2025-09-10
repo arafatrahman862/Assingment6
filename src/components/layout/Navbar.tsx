@@ -1,73 +1,51 @@
 import Logo from "@/assets/icons/Logo";
 import { Button } from "@/components/ui/button";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ModeToggle } from "./ModeToggler";
-import { Link, useLocation } from "react-router";
-import {
-  authApi,
-  useLogoutMutation,
-  useUserInfoQuery,
-} from "@/redux/features/auth/auth.api";
-import { useAppDispatch } from "@/redux/hook";
+import { Link, NavLink } from "react-router";
+import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
+import { role } from "@/constants/role";
+import UserMenu from "../user-menu";
 
-
-// Public navigation links
-const publicLinks = [
-  { href: "/", label: "Home" },
-  { href: "/features", label: "Features" },
-  { href: "/about", label: "About" },
-  { href: "/faq", label: "FAQ" },
-  { href: "/contact", label: "Contact" },
-];
-
-export default function Navbar() {
+export default function Header() {
   const { data } = useUserInfoQuery(undefined);
-  const [logout] = useLogoutMutation();
-  const dispatch = useAppDispatch();
-  const location = useLocation();
+  const user = data?.data;
 
-  const handleLogout = async () => {
-    await logout(undefined);
-    dispatch(authApi.util.resetApiState());
-  };
-
-  const isLoggedIn = Boolean(data?.data?.email);
-
-  // Links only for logged-in users
-  const loggedInLinks = [
-    { href: "/ride-booking", label: "Book a Ride" },
-    { href: "/driver/register", label: "Be a Driver" },
-    { href: "/user", label: "User Dashboard" },
+  // Default links
+  const navigationLinks = [
+    { href: "/", label: "Home", role: "PUBLIC" },
+    { href: "/features", label: "Features", role: "PUBLIC" },
+    { href: "/about", label: "About", role: "PUBLIC" },
+    { href: "/faq", label: "FAQ", role: "PUBLIC" },
+    { href: "/contact", label: "Contact", role: "PUBLIC" },
   ];
 
-  const getLinkClass = (href: string) =>
-    `text-muted-foreground hover:text-primary py-1.5 font-medium ${
-      location.pathname === href ? "text-primary underline" : ""
-    }`;
+  // Role-based links
+  if (user) {
+    if (user.role === role.rider) {
+      navigationLinks.push({ href: "/ride-booking", label: "Book a Ride", role: role.rider });
+      navigationLinks.push({ href: "/driver-register", label: "Be a Driver", role: role.rider });
+      navigationLinks.push({ href: "/rider", label: "Dashboard", role: role.rider });
+    } else if (user.role === role.driver) {
+      navigationLinks.push({ href: "/start-driving", label: "Start Driving", role: role.driver });
+      navigationLinks.push({ href: "/driver", label: "Dashboard", role: role.driver });
+    } else if (user.role === role.admin) {
+      navigationLinks.push({ href: "/admin", label: "Dashboard", role: role.admin });
+    }
+     else if (user.role === role.superAdmin) {
+      navigationLinks.push({ href: "/admin", label: "Dashboard", role: role.admin });
+    }
+  }
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-transparent backdrop-blur-sm border-b border-white/10">
-      <div className="container mx-auto px-4 flex h-16 items-center justify-between gap-4">
+    <header className="px-4 md:px-6 bg-black/10 backdrop-blur-2xl z-50 fixed top-0 left-0 w-full">
+      <div className="flex h-16 items-center justify-between gap-4">
         {/* Left side */}
         <div className="flex items-center gap-2">
-          {/* Mobile menu trigger */}
+          {/* Mobile menu */}
           <Popover>
             <PopoverTrigger asChild>
-              <Button
-                className="group size-8 md:hidden"
-                variant="ghost"
-                size="icon"
-              >
+              <Button className="group size-8 md:hidden" variant="ghost" size="icon">
                 <svg
                   className="pointer-events-none"
                   width={18}
@@ -78,73 +56,60 @@ export default function Navbar() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  xmlns="http://www.w3.org/2000/svg"
                 >
                   <path d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </Button>
             </PopoverTrigger>
-            <PopoverContent align="start" className="w-40 p-2 md:hidden">
-              <NavigationMenu className="max-w-none *:w-full">
-                <NavigationMenuList className="flex-col items-start gap-1">
-                  {publicLinks.map((link, index) => (
-                    <NavigationMenuItem key={index} className="w-full">
-                      <NavigationMenuLink asChild className={getLinkClass(link.href)}>
-                        <Link to={link.href}>{link.label}</Link>
-                      </NavigationMenuLink>
-                    </NavigationMenuItem>
-                  ))}
-                  {isLoggedIn &&
-                    loggedInLinks.map((link, index) => (
-                      <NavigationMenuItem key={index} className="w-full">
-                        <NavigationMenuLink asChild className={getLinkClass(link.href)}>
-                          <Link to={link.href}>{link.label}</Link>
-                        </NavigationMenuLink>
-                      </NavigationMenuItem>
-                    ))}
-                </NavigationMenuList>
-              </NavigationMenu>
+            <PopoverContent align="start" className="w-36 p-1 md:hidden rounded-none">
+              <div className="flex flex-col gap-2">
+                {navigationLinks.map((link) => (
+                  <NavLink
+                    key={link.href}
+                    to={link.href}
+                    className={({ isActive }) =>
+                      `py-1.5 px-2 rounded-none font-medium transition-colors ${
+                        isActive ? "text-primary" : "text-muted-foreground"
+                      } hover:text-primary`
+                    }
+                  >
+                    {link.label}
+                  </NavLink>
+                ))}
+              </div>
             </PopoverContent>
           </Popover>
 
           {/* Logo + Desktop nav */}
           <div className="flex items-center gap-6">
-            <Link to="/" className="text-primary hover:opacity-80">
+            <NavLink to="/" className="flex items-center">
               <Logo />
-            </Link>
-            {/* Navigation menu */}
-            <NavigationMenu className="max-md:hidden">
-              <NavigationMenuList className="gap-4">
-                {publicLinks.map((link, index) => (
-                  <NavigationMenuItem key={index}>
-                    <NavigationMenuLink asChild className={getLinkClass(link.href)}>
-                      <Link to={link.href}>{link.label}</Link>
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                ))}
-
-                {isLoggedIn &&
-                  loggedInLinks.map((link, index) => (
-                    <NavigationMenuItem key={index}>
-                      <NavigationMenuLink asChild className={getLinkClass(link.href)}>
-                        <Link to={link.href}>{link.label}</Link>
-                      </NavigationMenuLink>
-                    </NavigationMenuItem>
-                  ))}
-              </NavigationMenuList>
-            </NavigationMenu>
+            </NavLink>
+            <div className="hidden md:flex gap-4">
+              {navigationLinks.map((link) => (
+                <NavLink
+                  key={link.href}
+                  to={link.href}
+                  className={({ isActive }) =>
+                    `py-1.5 px-2 font-medium transition-colors ${
+                      isActive ? "text-primary underline" : "text-white hover:scale-105"
+                    } hover:text-primary`
+                  }
+                >
+                  {link.label}
+                </NavLink>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Right side */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
           <ModeToggle />
-          {isLoggedIn ? (
-            <Button onClick={handleLogout} variant="outline" className="text-sm">
-              Logout
-            </Button>
+          {user?.email ? (
+            <UserMenu data={data} />
           ) : (
-            <Button asChild className="text-sm">
+            <Button asChild className="text-sm rounded-none">
               <Link to="/login">Login</Link>
             </Button>
           )}
