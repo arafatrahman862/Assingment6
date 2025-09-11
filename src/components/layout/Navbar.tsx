@@ -24,7 +24,7 @@ export default function Header() {
   if (user) {
     if (user.role === role.rider) {
       navigationLinks.push({ href: "/ride-booking", label: "Book a Ride", role: role.rider });
-      navigationLinks.push({ href: "/driver-register", label: "Be a Driver", role: role.rider });
+      navigationLinks.push({ href: "/createDriver", label: "Be a Driver", role: role.rider });
       navigationLinks.push({ href: "/rider", label: "Dashboard", role: role.rider });
     } else if (user.role === role.driver) {
       navigationLinks.push({ href: "/start-driving", label: "Start Driving", role: role.driver });

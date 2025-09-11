@@ -17,6 +17,7 @@ import FeaturesSection from "@/pages/FeaturesSection";
 import FaqSection from "@/pages/FaqSection";
 import Contact from "@/pages/Contact";
 import RideBooking from "@/components/modules/Rider/RideBooking";
+import CreateDriver from "@/components/modules/Driver/CreateDriver";
 
 
 export const router = createBrowserRouter([
@@ -48,6 +49,10 @@ export const router = createBrowserRouter([
       {
         Component: RideBooking,
         path: "ride-booking",
+      },
+      {
+        Component: CreateDriver,
+        path: "createDriver",
       },
     ],
   },

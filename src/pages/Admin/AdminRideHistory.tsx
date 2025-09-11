@@ -122,7 +122,7 @@ export default function AdminRideHistory() {
                   <TableCell>{ride.fare ?? "-"}</TableCell>
                   <TableCell>
                     <Badge
-                      variant={
+                      varidesnt ={
                         ride.rideStatus === "COMPLETED"
                           ? "success"
                           : ride.rideStatus === "CANCELLED"
