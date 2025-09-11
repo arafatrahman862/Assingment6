@@ -32,7 +32,7 @@ export default function AdminAnalytics() {
 
   return (
     <div className="space-y-6">
-      {/* Header with background */}
+     
       <section className="relative py-10 w-full rounded-lg overflow-hidden">
         <img
           src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d"
@@ -48,7 +48,7 @@ export default function AdminAnalytics() {
         </div>
       </section>
 
-      {/* Stats Cards */}
+  
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <Card className="bg-blue-600 text-white">
           <CardHeader>
@@ -88,7 +88,7 @@ export default function AdminAnalytics() {
         </Card>
       </div>
 
-      {/* Filters */}
+     
       <div className="flex gap-2">
         {["Daily", "Weekly", "Monthly"].map((f) => (
           <Button
@@ -101,7 +101,7 @@ export default function AdminAnalytics() {
         ))}
       </div>
 
-      {/* Chart */}
+     
       <Card className="p-4">
         <h2 className="text-center font-semibold mb-4 uppercase">
           {filter} Rides Overview

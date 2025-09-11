@@ -49,13 +49,13 @@ export default function AdminRideHistory() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
-      {/* Header */}
+     
       <div className="bg-black text-white rounded-lg p-8 mb-6 shadow-md relative overflow-hidden">
         <h1 className="text-3xl font-bold">Ride History</h1>
         <p className="text-gray-300">View full details of all rides created by all users</p>
       </div>
 
-      {/* Filters */}
+   
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <Input
           placeholder="Search by Ride Status or Transaction ID"
@@ -122,9 +122,9 @@ export default function AdminRideHistory() {
                   <TableCell>{ride.fare ?? "-"}</TableCell>
                   <TableCell>
                     <Badge
-                      varidesnt ={
+                      variant ={
                         ride.rideStatus === "COMPLETED"
-                          ? "success"
+                          ? "outline"
                           : ride.rideStatus === "CANCELLED"
                           ? "destructive"
                           : "secondary"

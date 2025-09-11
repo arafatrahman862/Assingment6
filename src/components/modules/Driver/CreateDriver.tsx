@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { usePromoteToDriverMutation } from "@/redux/features/driver/driver.api"; // Import the mutation
+import { useAppSelector } from "@/redux/hook";
 
 export default function CreateDriver() {
   const [vehicleNumber, setVehicleNumber] = useState("");
@@ -10,7 +11,7 @@ export default function CreateDriver() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-
+//  const userId = useAppSelector((state: any) => state.user._id);
   // Use the mutation to promote a user to driver
   const [promoteToDriver, { isLoading, isError }] = usePromoteToDriverMutation();
 
@@ -36,16 +37,13 @@ export default function CreateDriver() {
     setError(null);
 
     try {
-      // Trigger the mutation to promote the user to a driver
-      await promoteToDriver(userId).unwrap(); // `unwrap()` is used to return the result and handle errors
 
-      // On success, show a success message
+    //   await promoteToDriver(userId).unwrap(); 
+
+  
       setSuccess("Successfully promoted to driver!");
-
-      // Optionally, you can send the vehicle data to the backend for saving
-      // Example: sendVehicleData({ vehicleNumber, vehicleType });
     } catch (err) {
-      // Handle any errors during the mutation
+     
       setError("An error occurred while promoting to driver.");
       console.error("Error promoting to driver:", err);
     }
@@ -55,7 +53,7 @@ export default function CreateDriver() {
     <div className="max-w-xl mx-auto p-6 bg-gray-800 text-white rounded-lg shadow-lg mt-20">
       <h2 className="text-3xl font-bold mb-4 text-center">Register as a Driver</h2>
 
-      {/* Vehicle Number */}
+     
       <div className="mb-4">
         <label htmlFor="vehicle-number" className="block text-sm font-medium">
           Vehicle Number
@@ -70,7 +68,7 @@ export default function CreateDriver() {
         />
       </div>
 
-      {/* Vehicle Type */}
+    
       <div className="mb-4">
         <label htmlFor="vehicle-type" className="block text-sm font-medium">
           Vehicle Type
@@ -91,11 +89,11 @@ export default function CreateDriver() {
         </Select>
       </div>
 
-      {/* Error or Success Message */}
+
       {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
       {success && <div className="text-green-500 text-sm mt-2">{success}</div>}
 
-      {/* Submit Button */}
+   
       <div className="text-center">
         <Button variant="default" onClick={handleSubmit} className="w-full mt-4" disabled={isLoading}>
           {isLoading ? "Submitting..." : "Submit"}
