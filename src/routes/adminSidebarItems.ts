@@ -7,9 +7,9 @@ import ManageFeedBacks from "@/pages/Admin/ManageFeedBacks";
 import ManageUsers from "@/pages/Admin/ManageUsers";
 import UpdateProfile from "@/pages/Admin/UpdateProfile";
 import { ISidebarItem } from "@/types";
-import { lazy } from "react";
+// import { lazy } from "react";
 
-const Analytics = lazy(() => import("@/pages/Admin/AdminAnalytics"));
+// const Analytics = lazy(() => import("@/pages/Admin/AdminAnalytics"));
 
 export const adminSidebarItems: ISidebarItem[] = [
   {

@@ -27,8 +27,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Dot } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router";
-import { toast } from "sonner";
+import { useLocation } from "react-router";
 import z from "zod";
 
 const FormSchema = z.object({
@@ -39,9 +38,9 @@ const FormSchema = z.object({
 
 export default function Verify() {
   const location = useLocation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [email] = useState(location.state);
-  const [confirmed, setConfirmed] = useState(false);
+  const [confirmed] = useState(false);
 
 
   const [timer, setTimer] = useState(5);
@@ -55,7 +54,7 @@ export default function Verify() {
 
 
 
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = async () => {
     // const toastId = toast.loading("Verifying OTP");
     // const userInfo = {
     //   email,

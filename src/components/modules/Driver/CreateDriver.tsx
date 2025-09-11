@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { usePromoteToDriverMutation } from "@/redux/features/driver/driver.api"; // Import the mutation
-import { useAppSelector } from "@/redux/hook";
 
 export default function CreateDriver() {
   const [vehicleNumber, setVehicleNumber] = useState("");
@@ -12,28 +11,28 @@ export default function CreateDriver() {
   const [success, setSuccess] = useState<string | null>(null);
 
 //  const userId = useAppSelector((state: any) => state.user._id);
-  // Use the mutation to promote a user to driver
-  const [promoteToDriver, { isLoading, isError }] = usePromoteToDriverMutation();
 
-  // Handle Vehicle Number Change
+  const [, { isLoading }] = usePromoteToDriverMutation();
+
+ 
   const handleVehicleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVehicleNumber(e.target.value);
   };
 
-  // Handle Vehicle Type Change
+
   const handleVehicleTypeChange = (value: string) => {
     setVehicleType(value);
   };
 
-  // Handle Form Submit
+
   const handleSubmit = async () => {
-    // Validate if fields are filled
+    
     if (!vehicleNumber || !vehicleType ) {
       setError("Please fill all the fields.");
       return;
     }
 
-    // Clear previous error
+  
     setError(null);
 
     try {
